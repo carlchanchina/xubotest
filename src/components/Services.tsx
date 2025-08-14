@@ -102,11 +102,7 @@ const Services = () => {
             <Badge
               key={category.name}
               variant={selectedCategory === category.name ? "default" : "secondary"}
-              className={`px-4 py-2 text-sm font-medium hover:scale-105 transition-all cursor-pointer animate-fade-in ${
-                selectedCategory === category.name 
-                  ? "bg-primary text-primary-foreground shadow-lg" 
-                  : "hover:bg-muted"
-              }`}
+              className="px-4 py-2 text-sm font-medium hover:scale-105 transition-all cursor-pointer animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
               onClick={() => setSelectedCategory(category.name)}
             >
