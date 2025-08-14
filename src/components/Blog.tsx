@@ -2,9 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Clock, User } from "lucide-react";
+import { useState } from "react";
 
 const Blog = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("全部");
+  
   const categories = [
+    { name: "全部", count: 41, color: "bg-primary" },
     { name: "标准解读", count: 12, color: "bg-primary" },
     { name: "试验能力", count: 8, color: "bg-secondary" },
     { name: "技术分享", count: 15, color: "bg-accent" },
@@ -74,6 +78,10 @@ const Blog = () => {
     }
   ];
 
+  const filteredPosts = selectedCategory === "全部" 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === selectedCategory);
+
   return (
     <section id="blog" className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -91,9 +99,14 @@ const Blog = () => {
           {categories.map((category, index) => (
             <Badge
               key={category.name}
-              variant="secondary"
-              className="px-4 py-2 text-sm font-medium hover:scale-105 transition-transform cursor-pointer animate-fade-in"
+              variant={selectedCategory === category.name ? "default" : "secondary"}
+              className={`px-4 py-2 text-sm font-medium hover:scale-105 transition-all cursor-pointer animate-fade-in ${
+                selectedCategory === category.name 
+                  ? "bg-primary text-primary-foreground shadow-lg" 
+                  : "hover:bg-muted"
+              }`}
               style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => setSelectedCategory(category.name)}
             >
               {category.name} ({category.count})
             </Badge>
@@ -102,11 +115,15 @@ const Blog = () => {
 
         {/* Blog Posts Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {blogPosts.map((post, index) => (
+          {filteredPosts.map((post, index) => (
             <Card
               key={post.id}
               className="group hover:shadow-medium transition-all duration-300 hover:-translate-y-2 cursor-pointer border-border bg-card animate-slide-up"
               style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => {
+                // 这里可以添加路由跳转到详情页
+                console.log('点击了文章:', post.title);
+              }}
             >
               <div className="aspect-video bg-gradient-primary rounded-t-lg mb-4 flex items-center justify-center">
                 <span className="text-primary-foreground font-semibold">图片占位</span>
