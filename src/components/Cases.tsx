@@ -2,58 +2,42 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Building2, Smartphone, Car, Plane, ArrowRight } from "lucide-react";
+import { useCases } from "@/hooks/useCases";
 
 const Cases = () => {
-  const cases = [
-    {
-      id: 1,
-      title: "华为5G基站设备环境可靠性测试",
-      client: "华为技术有限公司",
-      industry: "通信设备",
-      icon: Building2,
-      description: "对华为5G基站设备进行全面的环境可靠性测试，包括高低温、湿热、振动、冲击等多项测试，确保设备在各种恶劣环境下的稳定运行。",
-      testItems: ["温度循环测试", "湿热交变测试", "振动试验", "冲击试验", "防尘防水测试"],
-      duration: "45天",
-      result: "通过所有测试项目，产品可靠性达到设计要求",
-      tags: ["通信", "5G", "基站"]
-    },
-    {
-      id: 2,
-      title: "小米手机防水性能IP68认证测试",
-      client: "小米科技有限公司",
-      industry: "消费电子",
-      icon: Smartphone,
-      description: "为小米最新款智能手机进行IP68防护等级认证测试，验证产品在水下1.5米深度30分钟的防水性能。",
-      testItems: ["IPX8浸水试验", "IP6X防尘试验", "密封性检测", "功能性测试"],
-      duration: "15天",
-      result: "成功通过IP68认证，获得国际认证证书",
-      tags: ["手机", "防水", "IP68"]
-    },
-    {
-      id: 3,
-      title: "比亚迪车载电子系统环境适应性测试",
-      client: "比亚迪股份有限公司",
-      industry: "汽车电子",
-      icon: Car,
-      description: "对比亚迪新能源汽车的车载娱乐系统进行环境适应性测试，模拟车辆在不同气候和路况下的使用环境。",
-      testItems: ["汽车电子振动试验", "高低温存储", "温度冲击", "盐雾腐蚀", "EMC电磁兼容"],
-      duration: "60天",
-      result: "产品性能稳定，满足汽车行业标准要求",
-      tags: ["汽车", "车载", "新能源"]
-    },
-    {
-      id: 4,
-      title: "中航工业航空电子设备高海拔测试",
-      client: "中国航空工业集团",
-      industry: "航空航天",
-      icon: Plane,
-      description: "为航空电子导航设备进行高海拔环境模拟测试，验证设备在高空低压环境下的性能表现。",
-      testItems: ["低气压试验", "快速减压测试", "高海拔温度循环", "辐射耐受测试"],
-      duration: "90天",
-      result: "设备在模拟20000米高空环境下正常工作",
-      tags: ["航空", "导航", "高海拔"]
-    }
-  ];
+  const { cases, loading, error } = useCases();
+
+  if (loading) {
+    return (
+      <section id="cases" className="py-20 bg-gradient-card">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="text-xl text-muted-foreground">加载中...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="cases" className="py-20 bg-gradient-card">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="text-xl text-destructive">加载失败: {error}</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Icon mapping
+  const iconMap: Record<string, any> = {
+    Building2,
+    Smartphone,
+    Car,
+    Plane
+  };
 
   return (
     <section id="cases" className="py-20 bg-gradient-card">
@@ -69,7 +53,7 @@ const Cases = () => {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {cases.map((caseItem, index) => {
-            const Icon = caseItem.icon;
+            const Icon = iconMap[caseItem.icon_name] || Building2;
             return (
               <Card
                 key={caseItem.id}
@@ -110,7 +94,7 @@ const Cases = () => {
                     <div>
                       <h4 className="font-semibold text-foreground mb-2">测试项目</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {caseItem.testItems.map((item) => (
+                        {caseItem.test_items.map((item) => (
                           <div key={item} className="flex items-center space-x-2">
                             <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
                             <span className="text-sm text-foreground">{item}</span>
