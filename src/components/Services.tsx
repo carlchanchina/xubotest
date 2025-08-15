@@ -71,7 +71,8 @@ const Services = () => {
 
         {/* Service Categories */}
         <div className="flex flex-wrap justify-center gap-4 mb-12 animate-slide-up">
-          {categories.map((category, index) => (
+          {categories.slice() // 复制数组，避免改原数据
+          .sort((a, b) => b.count - a.count).map((category, index) => (
             <Badge
               key={category.name}
               variant={selectedCategory === category.name ? "default" : "secondary"}
